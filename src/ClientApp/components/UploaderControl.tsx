@@ -45,7 +45,7 @@ export class UploaderControl extends React.Component<any, UploaderControlState> 
     private handleFileChange(e) {
         e.preventDefault();
         let file = e.target.files[0];
-
+        
         if (file.type === "image/jpeg" ||
             file.type === "image/gif" ||
             file.type === "image/png") {
@@ -69,7 +69,7 @@ export class UploaderControl extends React.Component<any, UploaderControlState> 
                     file: null,
                     hasMessage: false,
                     hasError: true,
-                    alertMessage: "File with invalid Mime Type {file.type}. Expecting png, jpeg or gif"
+                    alertMessage: "File with invalid Mime Type '" + file.type + "'. Expecting png, jpeg or gif"
                 }
             });
         }
@@ -81,9 +81,18 @@ export class UploaderControl extends React.Component<any, UploaderControlState> 
                 <Alert isVisible={this.state.hasMessage || this.state.hasError} isError={this.state.hasError}>
                     {this.state.alertMessage}
                 </Alert>
-                // TODO: add bootstrap styles to input
-                <input type="file" disabled={this.state.isUploading}
-                    onChange={this.handleFileChange} /><br/>
+
+                // TODO: finishme (updating input text with input from file ctrl)
+
+                <div className="input-group">
+                    <label className="input-group-btn">
+                        <span className="btn btn-primary">
+                            Browse&hellip; <input className="nodisplay" type="file" disabled={this.state.isUploading} onChange={this.handleFileChange} />
+                        </span>
+                    </label>
+                    <input type="text" className="form-control" readOnly={true} />
+                </div><br/>
+
                 <button type="submit"
                     className={this.getSubmitButtonState()}
                     onClick={this.handleSubmit}>Upload Image</button>
