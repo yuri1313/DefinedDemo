@@ -1,5 +1,6 @@
 ﻿import * as React from 'react';
 import 'isomorphic-fetch';
+import axios from 'axios';
 import { Alert } from './Alert';
 import { ProgressBar } from './ProgressBar';
 import { FileSelector } from "./FileSelector";
@@ -48,6 +49,7 @@ export class UploaderControl extends React.Component<any, UploaderControlState> 
         
         let reader = new FileReader();
         reader.onloadend = () => {
+            //axios.
             //reader.result
             // TODO: start upload. on success/error process alert stuff
             ////this.setState((prevState) => {

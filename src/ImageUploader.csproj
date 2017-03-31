@@ -16,6 +16,10 @@
     <None Remove="yarn.lock" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="wwwroot\dist\axios.js" />
+    <Content Include="wwwroot\dist\axios.map" />
+    <Content Include="wwwroot\dist\axios.min.js" />
+    <Content Include="wwwroot\dist\axios.min.map" />
     <Content Include="wwwroot\dist\customization.css" />
   </ItemGroup>
   <Target Name="RunWebpack" AfterTargets="ComputeFilesToPublish">
