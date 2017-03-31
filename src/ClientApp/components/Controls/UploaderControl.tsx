@@ -2,6 +2,7 @@
 import 'isomorphic-fetch';
 import { Alert } from './Alert';
 import { ProgressBar } from './ProgressBar';
+import { FileSelector } from "./FileSelector";
 
 interface UploaderControlState {
     alertMessage: string;
@@ -32,12 +33,48 @@ export class UploaderControl extends React.Component<any, UploaderControlState> 
 
     private handleSubmit(e) {
         e.preventDefault();
-        // TODO: clear alert, disable submit button
+
+        this.setState((prevState) => {
+            return {
+                isUploading: true,
+                uploadProgress: prevState.uploadProgress,
+                hasValidFile: prevState.hasValidFile,
+                file: prevState.file,
+                hasMessage: false,
+                hasError: false,
+                alertMessage: null
+            }
+        });
+        
         let reader = new FileReader();
-        //reader.onloadend = () => {
-        //    imagePreviewUrl: reader.result
-        //    // TODO: start upload. on success/error process alert stuff
-        //};
+        reader.onloadend = () => {
+            //reader.result
+            // TODO: start upload. on success/error process alert stuff
+            ////this.setState((prevState) => {
+            ////    return {
+            ////        isUploading: false,
+            ////        uploadProgress: 100,
+            ////        hasValidFile: prevState.hasValidFile,
+            ////        file: prevState.file,
+            ////        hasMessage: true,
+            ////        hasError: false,
+            ////        alertMessage: "Upload went a-ok!"
+            ////    }
+            ////});
+        };
+        reader.onerror = (status) => {
+            this.setState((prevState) => {
+                return {
+                    isUploading: false,
+                    uploadProgress: 100,
+                    hasValidFile: prevState.hasValidFile,
+                    file: prevState.file,
+                    hasMessage: false,
+                    hasError: true,
+                    alertMessage: status.message
+                }
+            });
+        }
 
         reader.readAsDataURL(this.state.file);
     }
@@ -82,17 +119,9 @@ export class UploaderControl extends React.Component<any, UploaderControlState> 
                     {this.state.alertMessage}
                 </Alert>
 
-                // TODO: finishme (updating input text with input from file ctrl)
-
-                <div className="input-group">
-                    <label className="input-group-btn">
-                        <span className="btn btn-primary">
-                            Browse&hellip; <input className="nodisplay" type="file" disabled={this.state.isUploading} onChange={this.handleFileChange} />
-                        </span>
-                    </label>
-                    <input type="text" className="form-control" readOnly={true} />
-                </div><br/>
-
+                <FileSelector disabled={this.state.isUploading} onChange={this.handleFileChange} />
+                <br />
+                
                 <button type="submit"
                     className={this.getSubmitButtonState()}
                     onClick={this.handleSubmit}>Upload Image</button>

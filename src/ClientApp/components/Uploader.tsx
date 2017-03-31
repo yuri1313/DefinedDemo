@@ -1,6 +1,6 @@
 import * as React from 'react';
 import 'isomorphic-fetch';
-import { UploaderControl } from './UploaderControl';
+import { UploaderControl } from './Controls/UploaderControl';
 
 export class Uploader extends React.Component<any, void> {
         public render() {
