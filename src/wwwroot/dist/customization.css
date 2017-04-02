@@ -1,0 +1,7 @@
+﻿.ourbar {
+    min-width: 2em;
+}
+
+.nodisplay {
+    display: none !important;
+}
