@@ -17,7 +17,20 @@ module.exports = (env) => {
             ]
         },
         entry: {
-            vendor: ['axios', 'bootstrap', 'bootstrap/dist/css/bootstrap.css', 'event-source-polyfill', 'isomorphic-fetch', 'react', 'react-dom', 'react-router', 'jquery'],
+            vendor: [
+                'axios',
+                'bootstrap',
+                'bootstrap/dist/css/bootstrap.css',
+                'event-source-polyfill',
+                'isomorphic-fetch',
+                'react',
+                'react-dom',
+                'react-router',
+                'react-redux',
+                'redux',
+                'redux-thunk',
+                'react-router-redux',
+                'jquery'],
         },
         output: {
             path: path.join(__dirname, 'wwwroot', 'dist'),

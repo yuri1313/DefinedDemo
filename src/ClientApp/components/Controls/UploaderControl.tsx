@@ -1,9 +1,11 @@
 ﻿import * as React from 'react';
 import 'isomorphic-fetch';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import { Alert } from './Alert';
 import { ProgressBar } from './ProgressBar';
 import { FileSelector } from "./FileSelector";
+import { ImageUploadResult } from "../Promises/UploaderPromises";
 
 interface UploaderControlState {
     alertMessage: string;
@@ -47,25 +49,53 @@ export class UploaderControl extends React.Component<any, UploaderControlState> 
             }
         });
         
-        let reader = new FileReader();
-        reader.onloadend = () => {
-            axios.post()
-            //axios.
-            //reader.result
-            // TODO: start upload. on success/error process alert stuff
-            ////this.setState((prevState) => {
-            ////    return {
-            ////        isUploading: false,
-            ////        uploadProgress: 100,
-            ////        hasValidFile: prevState.hasValidFile,
-            ////        file: prevState.file,
-            ////        hasMessage: true,
-            ////        hasError: false,
-            ////        alertMessage: "Upload went a-ok!"
-            ////    }
-            ////});
+        var data = new FormData();
+        data.append('file', this.state.file);
+
+        var config = {
+            onUploadProgress: progressEvent => {
+                var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                this.setState((prevState) => {
+                    return {
+                        isUploading: true,
+                        uploadProgress: percentCompleted,
+                        hasValidFile: prevState.hasValidFile,
+                        file: prevState.file,
+                        hasMessage: false,
+                        hasError: false,
+                        alertMessage: null
+                    }
+                });
+            }
         };
-        reader.onerror = (status) => {
+
+        axios.post('/api/Image/FileUpload', data, config)
+            .then(res => {
+                var result = res.data as ImageUploadResult;
+                this.parseErrors(result);
+
+                // TODO: finishme (send to redux)
+            })
+            .catch(err => {
+                var result = err.response.data as ImageUploadResult;
+                this.parseErrors(result);
+            });
+    }
+
+    private parseErrors(result) {
+        if (result.uploadSuccessful) {
+            this.setState((prevState) => {
+                return {
+                    isUploading: false,
+                    uploadProgress: 100,
+                    hasValidFile: prevState.hasValidFile,
+                    file: prevState.file,
+                    hasMessage: true,
+                    hasError: false,
+                    alertMessage: "Upload Complete!"
+                }
+            });
+        } else {
             this.setState((prevState) => {
                 return {
                     isUploading: false,
@@ -74,12 +104,10 @@ export class UploaderControl extends React.Component<any, UploaderControlState> 
                     file: prevState.file,
                     hasMessage: false,
                     hasError: true,
-                    alertMessage: status.message
+                    alertMessage: result.uploadErrorMessage
                 }
             });
         }
-
-        reader.readAsDataURL(this.state.file);
     }
 
     private handleFileChange(e) {
