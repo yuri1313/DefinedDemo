@@ -87,5 +87,33 @@ namespace ImageUploader.Helpers
                 }
             }
         }
+
+        public static ImageFileResult GetFile(string directoryPath, string fileBasePath)
+        {
+            var files = Directory.EnumerateFiles(directoryPath, $"{fileBasePath}.*").ToList();
+
+            if (files.Count == 0)
+            {
+                throw new ArgumentException($"File {fileBasePath} not found!");
+            }
+
+            var file = files.First();
+
+            var fileData = File.ReadAllBytes(file);
+            var fileInfo = new FileInfo(file);
+            var ext = fileInfo.Extension.Substring(1);
+            var mime = AcceptedMimeTypes.FirstOrDefault(t => t.Value == ext);
+
+            if (string.IsNullOrEmpty(mime.Key))
+            {
+                throw new ArgumentException("File is of unsupported mime type!");
+            }
+
+            return new ImageFileResult
+            {
+                ImageData = fileData,
+                ImageMimeType = mime.Key
+            };
+        }
     }
 }

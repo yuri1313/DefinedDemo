@@ -75,17 +75,41 @@ namespace ImageUploader.Controllers
         }
 
         [HttpGet("{fileId}")]
-        public async Task<FileContentResult> Download(Guid fileId)
+        public IActionResult Download(Guid fileId)
         {
-            var imgFileName = $"{fileId}";
-            throw new NotImplementedException();
+            return this.DownloadFile(fileId.ToString());
         }
 
         [HttpGet("{fileId}/Thumbnail")]
-        public async Task<FileContentResult> DownloadThumbnail(Guid fileId)
+        public IActionResult DownloadThumbnail(Guid fileId)
         {
             var imgTnFileName = $"{fileId}_tn";
-            throw new NotImplementedException();
+
+            return this.DownloadFile(imgTnFileName);
+        }
+
+        private IActionResult DownloadFile(string imgFileName)
+        {
+            try
+            {
+                var tempPath = Path.Combine(Path.GetTempPath(), "imageUploader");
+                if (!Directory.Exists(tempPath))
+                {
+                    throw new ArgumentException("No images available!");
+                }
+                
+                var fileResult = ImageHelper.GetFile(tempPath, imgFileName);
+
+                return new FileContentResult(fileResult.ImageData, fileResult.ImageMimeType);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ImageUploadResult
+                {
+                    UploadErrorMessage = ex.Message,
+                    UploadSuccessful = false
+                });
+            }
         }
 
         public class ImageUploadResult
