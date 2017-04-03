@@ -46,7 +46,7 @@ export class Uploader extends React.Component<any, UploaderState> {
     public render() {
         return <div>
             <h1>Uploader</h1>
-            <p>Upload new images</p>
+            <p>Here you can upload new images, view the last one you uploaded/selected<br/> or select a previsouly uploaded image from the gallery to view in more detail (only for the current store session)</p>
             <UploaderControl onNewItem={this.handleNewUpload} />
             <ViewerControl currentItem={this.state.currentItemId} />
             <ImageCarousel items={this.state.items} onItemChange={this.handleItemSelection} />
