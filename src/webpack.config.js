@@ -19,11 +19,12 @@ module.exports = (env) => {
             rules: [
                 { test: /\.ts(x?)$/, include: /ClientApp/, use: 'babel-loader' },
                 { test: /\.tsx?$/, include: /ClientApp/, use: 'awesome-typescript-loader?silent=true' },
-                { test: /\.css$/, use: isDevBuild ? ['style-loader', 'css-loader'] : ExtractTextPlugin.extract({ use: 'css-loader' }) },
+                { test: /\.css$/, use: ExtractTextPlugin.extract({ use: 'css-loader' }) },
                 { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
             ]
         },
         plugins: [
+            new ExtractTextPlugin('site.css'),
             new CheckerPlugin(),
             new webpack.DllReferencePlugin({
                 context: __dirname,
@@ -38,7 +39,6 @@ module.exports = (env) => {
         ] : [
             // Plugins that apply in production builds only
             new webpack.optimize.UglifyJsPlugin(),
-            new ExtractTextPlugin('site.css')
         ])
     }];
 };

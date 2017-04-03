@@ -5,7 +5,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ImageUploader.Helpers
 {
@@ -21,7 +20,7 @@ namespace ImageUploader.Helpers
             { "image/png", new[] {"png"} }
         };
 
-        public static void GetCompressedImages(
+        public static void GenerateCompressedImages(
             Stream originalImageStream, 
             string originalImageMimeType, 
             string imageFilePath, 

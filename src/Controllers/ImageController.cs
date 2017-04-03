@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ImageUploader.Helpers;
+using ImageUploader.Models.api;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ImageUploader.Controllers
@@ -51,7 +52,7 @@ namespace ImageUploader.Controllers
                 var imgFileName = $"{fileId}.{ext}";
                 var imgTnFileName = $"{fileId}_tn.{ext}";
 
-                ImageHelper.GetCompressedImages(
+                ImageHelper.GenerateCompressedImages(
                     fileToUse.OpenReadStream(),
                     ImageHelper.AcceptedMimeTypes[fileToUse.ContentType].First(),
                     Path.Combine(tempPath, imgFileName),
@@ -110,14 +111,6 @@ namespace ImageUploader.Controllers
                     UploadSuccessful = false
                 });
             }
-        }
-
-        public class ImageUploadResult
-        {
-            public string UploadTimestamp { get; set; }
-            public Guid ImageId { get; set; }
-            public bool UploadSuccessful { get; set; }
-            public string UploadErrorMessage { get; set; }
         }
     }
 }
