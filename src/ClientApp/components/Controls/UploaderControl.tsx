@@ -73,8 +73,6 @@ export class UploaderControl extends React.Component<any, UploaderControlState> 
             .then(res => {
                 var result = res.data as ImageUploadResult;
                 this.parseErrors(result);
-
-                // TODO: finishme (send to redux)
             })
             .catch(err => {
                 var result = err.response.data as ImageUploadResult;
@@ -95,6 +93,7 @@ export class UploaderControl extends React.Component<any, UploaderControlState> 
                     alertMessage: "Upload Complete!"
                 }
             });
+            this.props.onNewItem(result);
         } else {
             this.setState((prevState) => {
                 return {

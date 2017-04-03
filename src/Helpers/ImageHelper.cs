@@ -14,11 +14,11 @@ namespace ImageUploader.Helpers
         private const int DefaultQuality = 50;
         private const int ThumbnailWidth = 150;
 
-        public static Dictionary<string, string> AcceptedMimeTypes => new Dictionary<string, string>
+        public static Dictionary<string, string[]> AcceptedMimeTypes => new Dictionary<string, string[]>
         {
-            { "image/jpeg", "jpg" },
-            { "image/gif", "gif" },
-            { "image/png", "png" }
+            { "image/jpeg", new[] {"jpg", "jpeg"} },
+            { "image/gif", new[] {"gif"} },
+            { "image/png", new[] {"png"} }
         };
 
         public static void GetCompressedImages(
@@ -69,6 +69,7 @@ namespace ImageUploader.Helpers
                     switch (originalImageMimeType)
                     {
                         case "jpg":
+                        case "jpeg":
                             format = ImageFormat.Jpeg;
                             break;
                         case "png":
@@ -102,7 +103,7 @@ namespace ImageUploader.Helpers
             var fileData = File.ReadAllBytes(file);
             var fileInfo = new FileInfo(file);
             var ext = fileInfo.Extension.Substring(1);
-            var mime = AcceptedMimeTypes.FirstOrDefault(t => t.Value == ext);
+            var mime = AcceptedMimeTypes.FirstOrDefault(t => t.Value.Contains(ext));
 
             if (string.IsNullOrEmpty(mime.Key))
             {

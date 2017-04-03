@@ -53,7 +53,7 @@ namespace ImageUploader.Controllers
 
                 ImageHelper.GetCompressedImages(
                     fileToUse.OpenReadStream(),
-                    ImageHelper.AcceptedMimeTypes[fileToUse.ContentType],
+                    ImageHelper.AcceptedMimeTypes[fileToUse.ContentType].First(),
                     Path.Combine(tempPath, imgFileName),
                     Path.Combine(tempPath, imgTnFileName));
 
