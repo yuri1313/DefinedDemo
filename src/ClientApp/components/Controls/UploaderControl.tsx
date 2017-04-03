@@ -49,6 +49,7 @@ export class UploaderControl extends React.Component<any, UploaderControlState> 
         
         let reader = new FileReader();
         reader.onloadend = () => {
+            axios.post()
             //axios.
             //reader.result
             // TODO: start upload. on success/error process alert stuff
